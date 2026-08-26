@@ -541,6 +541,15 @@ export default (editor: Editor, opts) => {
       }],
     }, { at: 10 })
     editor.StyleManager.addProperty('typography', {
+      name: 'Text underline offset',
+      property: 'text-underline-offset',
+      type: 'integer',
+      units: ['px', 'em', 'rem', '%'],
+      default: '',
+      fixedValues: ['auto', 'inherit', 'initial', 'revert', 'unset'],
+      info: 'The text-underline-offset CSS property sets the distance between a text underline and its original position.',
+    }, { at: 11 })
+    editor.StyleManager.addProperty('typography', {
       name: 'Text transform',
       property: 'text-transform',
       type: 'select',
@@ -553,7 +562,7 @@ export default (editor: Editor, opts) => {
         { id: 'lowercase', value: 'lowercase', name: 'lowercase' },
       ],
       info: 'The text-transform CSS property sets how to capitalize an element\'s text. It can be used to make text appear in all-uppercase or all-lowercase, or with each word capitalized.',
-    }, { at: 11 })
+    }, { at: 12 })
     editor.StyleManager.addProperty('typography', {
       name: 'Text overflow',
       property: 'text-overflow',
@@ -568,7 +577,7 @@ export default (editor: Editor, opts) => {
         { id: 'unset', value: 'unset', name: 'unset' },
       ],
       info: 'The text-overflow CSS property sets how hidden overflow content is signaled to users. It can be clipped, display an ellipsis (\'…\', U+2026 HORIZONTAL ELLIPSIS) or a Web author-defined string. It covers the two long-hand properties text-overflow-clip and text-overflow-string.',
-    }, { at: 12 })
+    }, { at: 13 })
     /***************/
     /* Decorations */
     /***************/
@@ -904,6 +913,75 @@ export default (editor: Editor, opts) => {
       ],
       info: 'Aligns elements to scroll snaps.',
     }, { at: 13 })
+
+    editor.StyleManager.removeProperty('extra', 'transition')
+    editor.StyleManager.addProperty('extra', {
+      name: 'Transition',
+      property: 'transition',
+      type: 'stack',
+      full: true,
+      properties: [{
+        name: 'Transition property',
+        property: 'transition-property',
+        type: 'select',
+        options: [
+          { id: 'all' },
+          { id: 'width' },
+          { id: 'height' },
+          { id: 'background-color' },
+          { id: 'transform' },
+          { id: 'box-shadow' },
+          { id: 'opacity' },
+          { id: 'filter' },
+          { id: 'color' },
+          { id: 'border-color' },
+          { id: 'backdrop-filter' },
+          { id: 'visibility' },
+        ],
+        default: 'width',
+      }, {
+        name: 'Transition duration',
+        property: 'transition-duration',
+        type: 'number',
+        units: ['s', 'ms'],
+        default: '2s',
+      }, {
+        name: 'Transition timing function',
+        property: 'transition-timing-function',
+        type: 'select',
+        options: [
+          { id: 'linear' },
+          { id: 'ease' },
+          { id: 'ease-in' },
+          { id: 'ease-out' },
+          { id: 'ease-in-out' },
+        ],
+        default: 'ease',
+      }],
+    }, { at: 1 })
+    editor.StyleManager.addProperty('extra', {
+      name: 'Transform origin',
+      property: 'transform-origin',
+      type: 'composite',
+      default: '',
+      fixedValues: ['inherit', 'initial', 'revert', 'unset'],
+      properties: [{
+        name: 'Horizontal origin',
+        property: 'transform-origin-x',
+        type: 'number',
+        units: ['px', '%', 'em', 'rem'],
+        default: '',
+        fixedValues: ['left', 'center', 'right'],
+      }, {
+        name: 'Vertical origin',
+        property: 'transform-origin-y',
+        type: 'number',
+        units: ['px', '%', 'em', 'rem'],
+        default: '',
+        fixedValues: ['top', 'center', 'bottom'],
+      }],
+      info: 'The transform-origin CSS property sets the point around which an element is transformed.',
+    }, { at: 3 })
 
     editor.SelectorManager.states.add({name: 'before', label: 'Before'})
     editor.SelectorManager.states.add({name: 'after', label: 'After'})
