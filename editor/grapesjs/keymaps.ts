@@ -27,12 +27,21 @@ function resetPanel(editor: Editor): void {
   projectBarBtns.forEach(button => button.set('active', false))
 }
 
+function isPreviewActive(editor: Editor): boolean {
+  return Boolean(editor.Panels.getButton('options', 'preview')?.get('active'))
+}
+
 /**
- * Escapes the current context in this order : modal, Publish dialog, left panel.
+ * Escapes the current context in this order: preview, modal, Publish dialog, left panel.
  * If none of these are open, it selects the body.
  * @param editor The editor.
  */
 function escapeContext(editor: Editor): void {
+  if (isPreviewActive(editor)) {
+    setButton(editor, 'options', 'preview', false)
+    return
+  }
+
   const publishDialog = (editor as PublishableEditor).PublicationManager.dialog
   const projectBarPanel = editor.Panels.getPanel('project-bar-panel')
 
@@ -193,7 +202,10 @@ export function keymapsPlugin(editor: Editor, opts: PluginOptions): void {
     if (event.key.toLowerCase() === defaultKms.kmClosePanel.keys) {
       const target = event.target as HTMLElement | null
       if(editor.getEditing()) return // Close the rich text edition
-      if(editor.Modal.isOpen()) {
+      if(isPreviewActive(editor)) {
+        event.preventDefault()
+        escapeContext(editor)
+      } else if(editor.Modal.isOpen()) {
         editor.Modal.close()
       } else if (target) { // If target exists...
         if (target.tagName === 'INPUT' && target.getAttribute('type') === 'submit') { // If it's a submit button...
